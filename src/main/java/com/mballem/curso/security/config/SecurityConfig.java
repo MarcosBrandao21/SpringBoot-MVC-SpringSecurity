@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.mballem.curso.security.enums.AuthorityEnum;
 import com.mballem.curso.security.service.UsuarioService;
 
 @EnableWebSecurity
@@ -18,9 +19,16 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		
+		// acessos publicos liberados
 		http.authorizeRequests()
 		.antMatchers("/webjars/**", "/css/**", "/image/**", "/js/**").permitAll()
 		.antMatchers("/","/home").permitAll()
+		
+		// acessos privados admin
+		.antMatchers("/u/**").hasAuthority(AuthorityEnum.ADMIN.getAuthority())
+		
+		// acessos privados medicos
+		.antMatchers("/medicos/**").hasAuthority(AuthorityEnum.MEDICO.getAuthority())
 		
 		.anyRequest().authenticated()
 		.and()

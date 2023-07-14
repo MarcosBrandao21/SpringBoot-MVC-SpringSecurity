@@ -12,7 +12,7 @@ import com.mballem.curso.security.domain.Medico;
 public class MedicoController {
 	
 	@GetMapping({"/dados"})
-	public String abrirPorMedico(Medico medico, ModelMap model) {
+	public String medico(Medico medico, ModelMap model) {
 		
 		return "medico/cadastro";
 	}

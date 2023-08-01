@@ -1,6 +1,7 @@
 package com.mballem.curso.security.service;
 
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -36,6 +37,20 @@ public class EspecialidadeService {
 				? repository.findAll(datatables.getPageable()) 
 				: repository.findAllByTitulo(datatables.getSearch(), datatables.getPageable());
 		return datatables.getResponse(page);
+	}
+
+	@Transactional(readOnly = true)
+	public Especialidade obterEspecialidadePorId(Long idEspecialidade) {
+		Optional<Especialidade> especialidade = repository.findById(idEspecialidade);
+		if(Boolean.FALSE.equals(especialidade.isPresent())) {
+			throw new IllegalArgumentException("Especialidade com id: " + idEspecialidade + "não existe!");
+		}
+		return especialidade.get();
+	}
+
+	@Transactional(readOnly = false)
+	public void removerEspecialidade(Long idEspecialidade) {
+		repository.delete(obterEspecialidadePorId(idEspecialidade));
 	}
 
 }
